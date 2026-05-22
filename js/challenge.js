@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const commentForm = getById('comment-form')
   const btnList = [plusBtn, minusBtn, heartBtn, commentBtn]
 
+  counter.textContent = 0
   counter.setAttribute('data-paused', 'false')
   let count = 0
 
@@ -41,16 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function likeNum(counter) {
   const likeList = document.querySelector('.likes')
   if(getById('like' + counter.textContent) !== null) {
+
     const numLi = getById('like' + counter.textContent)
     numLi.setAttribute('data-likes', parseInt(numLi.getAttribute('data-likes')) + 1)
     numLi.textContent = `${numLi.id.slice(4)} has been liked ${numLi.getAttribute('data-likes')} times.`
   } else {
     const numLi = document.createElement('li')
+    const numsList = [...likeList.children]
     numLi.id = 'like' + counter.textContent
     numLi.setAttribute('data-likes', 1)
     numLi.textContent = `${counter.textContent} has been liked 1 time.`
 
-    likeList.appendChild(numLi)
+    numsList.push(numLi)
+    numsList.sort((a, b) => parseInt(a.id.slice(4)) > parseInt(b.id.slice(4)))
+
+    likeList.replaceChildren(...numsList)
   }
 }
 
